@@ -1,0 +1,1 @@
+Ejecuta el script para agregar las tablas.
