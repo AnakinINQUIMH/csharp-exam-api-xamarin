@@ -25,7 +25,9 @@ Implementación del Software
 
 -Configura la conexión a la base de datos de la api en appSettings.json
 
--Configure las variables de entorno necesarias (claves secretas, configuración de base de datos, etc.).
+-Configura las variables de entorno necesarias (claves secretas, configuración de base de datos, etc.).
+
+-Configura a que URL base se conectara la App en DataBaseService.cs
 
 Monitoreo y Mantenimiento
 
