@@ -1,0 +1,50 @@
+
+IF NOT EXISTS(SELECT 1 FROM SYSOBJECTS WHERE NAME = 'TypeBirds')
+BEGIN
+
+	CREATE TABLE TypeBirds
+	(
+		TypeId		INT IDENTITY(1,1) NOT NULL,
+	    TypeName		VARCHAR(200) 
+		
+	) 
+	
+	ALTER TABLE TypeBirds
+	ADD CONSTRAINT PK_TypeBirds PRIMARY KEY (TypeId)
+
+
+END
+
+IF NOT EXISTS(SELECT 1 FROM TypeBirds)
+BEGIN
+	INSERT INTO TypeBirds(TypeName)
+	SELECT 'Chipes'
+	INSERT INTO TypeBirds(TypeName)
+	SELECT 'Gorriones'
+	INSERT INTO TypeBirds(TypeName)
+	SELECT 'Mosqueros'
+END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM SYSOBJECTS WHERE NAME = 'Birds')
+BEGIN
+
+	CREATE TABLE Birds
+	(
+		Id		INT IDENTITY(1,1) NOT NULL,
+	    Name		VARCHAR(200) ,
+		Feeding			VARCHAR(200) ,
+		TypeId		INT NOT NULL,
+	) 
+	
+	ALTER TABLE Birds
+	ADD CONSTRAINT PK_Birds PRIMARY KEY (Id)
+
+	ALTER TABLE Birds
+	ADD CONSTRAINT FK_TypeId
+	FOREIGN KEY (TypeId) 
+	REFERENCES TypeBirds(TypeId);
+
+END
+
+GO

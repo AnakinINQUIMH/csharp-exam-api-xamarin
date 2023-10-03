@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCRUD.Views.ReadListBirds"
+              Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="BtnAdd" Text="Add bird" Clicked="BtnAdd_Clicked" />
+    </ContentPage.ToolbarItems>
+<ContentPage.Content>
+        <ListView x:Name="myListView"
+                  ItemsSource="{Binding BirdsModel}"
+                  RefreshCommand="{Binding LoadBirdsModelCommand}"
+                  HasUnevenRows="true"
+                  IsPullToRefreshEnabled="true"
+                  IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  ItemSelected="OnBirdSelect"
+                  CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame HasShadow="True" CornerRadius="5" BorderColor="Gray" Margin="10,10,10,10" >
+
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+
+                                <Label Text="{Binding listBirds.Name}" VerticalOptions="CenterAndExpand" WidthRequest="250" TextColor="Gray" FontSize="Medium" />
+    
+                                <Button  Clicked="Editar_Clicked" ImageSource="editar.png" HorizontalOptions="End" WidthRequest="50" HeightRequest="50"  />
+
+                                <Button  Clicked="Eliminar_Clicked" ImageSource="basura.png" HorizontalOptions="End" WidthRequest="50" HeightRequest="50" />
+                                                      
+                        </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </ContentPage.Content>
+</ContentPage>
