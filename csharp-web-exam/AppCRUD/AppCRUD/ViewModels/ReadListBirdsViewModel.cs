@@ -11,13 +11,13 @@ namespace AppCRUD.ViewModels
 {
     public class ReadListBirdsViewModel : BaseViewModel
     {
-        public ObservableRangeCollection<ListBirdsModel> BirdsModel { get; set; }
+        public ObservableRangeCollection<BirdsModel> BirdsModel { get; set; }
         public Command LoadBirdsModelCommand { get; set; }
 
         public ReadListBirdsViewModel()
         {
             Title = resources.TitleReadList;
-            BirdsModel = new ObservableRangeCollection<ListBirdsModel>();
+            BirdsModel = new ObservableRangeCollection<BirdsModel>();
             try
             {
                 LoadBirdsModelCommand = new Command(async () => await ExecuteLoadBirdsModelCommand());
@@ -40,15 +40,17 @@ namespace AppCRUD.ViewModels
             try
             {
                 BirdsModel.Clear();
-                IEnumerable<ListBirdsModel> listBirds = await Service.GetListBirdAsync();
-                if (listBirds.ElementAt(0).generalResponseModel.Status=="200")
+                ListBirdsModel listBirds = await Service.GetListBirdAsync();
+                if (listBirds.GeneralResponseModel.Status=="200" || listBirds.GeneralResponseModel.Status.ToUpper() == "OK")
                 {
-                    BirdsModel.ReplaceRange(listBirds);
+                    IEnumerable<BirdsModel> list = listBirds.ListBirds;
+                    BirdsModel.ReplaceRange(list);
                 }
                 
             }
             catch (Exception e)
             {
+                IsBusy = false;
                 string error = e.InnerException.Message;
             }
             finally

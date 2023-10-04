@@ -31,8 +31,8 @@ namespace AppCRUD.Views
 
         private async void Editar_Clicked(object sender, EventArgs e)
         {
-            Button button = sender as Button;
-            BirdsModel item = button?.CommandParameter as BirdsModel; 
+            Button button = (Button)sender;
+            BirdsModel item = (BirdsModel)button.BindingContext;
 
             if (item != null)
             {
@@ -42,16 +42,20 @@ namespace AppCRUD.Views
 
         private async void Eliminar_Clicked(object sender, EventArgs e)
         {
-            Button button = sender as Button;
-            BirdsModel item = button?.CommandParameter as BirdsModel;
-
+            Button button = (Button)sender;
+            BirdsModel item = (BirdsModel)button.BindingContext;
+            GeneralResponseModel response = null;
             if (item != null)
             {
                 
                 string action = await DisplayActionSheet($"¿Desea eliminar el ave: {item.Name}", "Cancelar", "Eliminar");
                 if (action == "Eliminar")
                 {
-                    await viewModel.Service.DeleteBirdAsync(item.Id);
+                    response = await viewModel.Service.DeleteBirdAsync(item.Id);
+                   if( response!=null)
+                    await DisplayAlert(response.Status, response.Message, "Aceptar");
+
+                    viewModel.LoadBirdsModelCommand.Execute(null);
                 }
             }
         }
@@ -63,9 +67,8 @@ namespace AppCRUD.Views
 
         private async void OnBirdSelect(object sender, SelectedItemChangedEventArgs e)
         {
-            Button button = sender as Button;
-            BirdsModel item = button?.CommandParameter as BirdsModel;
-            await DisplayAlert("Alimentacion", item.Feeding, "Ok");
+            BirdsModel selectBird = (BirdsModel)e.SelectedItem;
+            await DisplayAlert("Alimentacion", selectBird.Feeding, "Ok");
 
         }
     }

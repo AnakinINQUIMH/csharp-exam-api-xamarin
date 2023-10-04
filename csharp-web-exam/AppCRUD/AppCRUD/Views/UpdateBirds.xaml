@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCRUD.Views.UpdateBirds"
-             xmlns:resources="clr-namespace:AppCRUD.Resources"
-              Title="{Binding Title}">
+             xmlns:resources="clr-namespace:AppCRUD.Resources" xmlns:local="clr-namespace:AppCRUD.ViewModels"
+             Title="{Binding Title}"
+             x:DataType="local:UpdateBirdsViewModel">
 <ContentPage.Content>
         <StackLayout>
             <Label Text="{x:Static resources:GlobalResource.labelName}" Margin="60,20,60,0" HorizontalOptions="Start" TextColor="Gray" />

@@ -91,7 +91,7 @@ namespace csharp_web_exam_api.Controllers
         #region Post
         // POST api/values
         [HttpPost]
-        public GeneralResponseModel Post([FromBody] BirdsModel bird)
+        public ActionResult<GeneralResponseModel> Post([FromBody] BirdsModel bird)
         {
             GeneralResponseModel response= null;
             BirdsModel newBird = new BirdsModel
@@ -128,7 +128,7 @@ namespace csharp_web_exam_api.Controllers
         #region Put
         // PUT api/values/5
         [HttpPut()]
-        public GeneralResponseModel Put( [FromBody] BirdsModel birdUpdate)
+        public ActionResult<GeneralResponseModel> Put( [FromBody] BirdsModel birdUpdate)
         {
             BirdsModel bird = _context.Birds.Find(birdUpdate.Id);
             GeneralResponseModel response = null;
@@ -163,7 +163,7 @@ namespace csharp_web_exam_api.Controllers
         #region Delete
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<GeneralResponseModel> Delete(int id)
         {
             BirdsModel bird = _context.Birds.Find(id);
             GeneralResponseModel response = null;
@@ -188,7 +188,7 @@ namespace csharp_web_exam_api.Controllers
             {
                 response = new GeneralResponseModel { status = _insternalserverError, message = e.InnerException.Message };
             }
-
+            return response;
         }
         #endregion
     }

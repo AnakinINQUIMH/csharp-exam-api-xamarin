@@ -8,7 +8,7 @@ namespace AppCRUD.ViewModels
 {
    public class UpdateBirdsViewModel :BaseViewModel
     {
-        public BirdsModel BirdsModel;
+        public BirdsModel BirdsModel { get; set; }
         public TypeBirdsModel TypeBirdsModel { get; set; }
         public UpdateBirdsViewModel()
         {

@@ -6,8 +6,7 @@ namespace AppCRUD.Models
 {
     public class ListBirdsModel
     {
-        public IEnumerable<BirdsModel> listBirds { get; set; }
-
-       public  GeneralResponseModel generalResponseModel { get; set; }
+        public IEnumerable<BirdsModel> ListBirds { get; set; }
+        public GeneralResponseModel GeneralResponseModel { get; set; }
     }
 }

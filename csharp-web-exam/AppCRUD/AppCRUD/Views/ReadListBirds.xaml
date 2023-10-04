@@ -22,7 +22,7 @@
 
                             <StackLayout Orientation="Horizontal" Spacing="10">
 
-                                <Label Text="{Binding listBirds.Name}" VerticalOptions="CenterAndExpand" WidthRequest="250" TextColor="Gray" FontSize="Medium" />
+                                <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" WidthRequest="250" TextColor="Gray" FontSize="Medium" />
     
                                 <Button  Clicked="Editar_Clicked" ImageSource="editar.png" HorizontalOptions="End" WidthRequest="50" HeightRequest="50"  />
 

@@ -17,8 +17,8 @@ namespace AppCRUD.Services
     public class DataBaseService : IService
     {
 
-
-        private const string _baseUrl = "http://192.168.0.16:80/ApiAves/";
+        private HttpClient _httpClient = new HttpClient();
+        private const string _baseUrl = "https://cb94-189-203-182-145.ngrok-free.app";
 
         #region Creates
         /// <summary>
@@ -39,14 +39,22 @@ namespace AppCRUD.Services
                 };
 
                 string jsonData = JsonConvert.SerializeObject(dataPost);
-                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 HttpRequestMessage request = new HttpRequestMessage();
-                request.RequestUri = new Uri($"{_baseUrl}/api/values/");
+                request.RequestUri = new Uri($"{_baseUrl}/api/values");
                 request.Method = HttpMethod.Post;
-                request.Headers.Add("Accpet", "application/json");
+                request.Headers.Add("Accept", "application/json");
                 request.Content = content;
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.SendAsync(request);
+
+                HttpResponseMessage response = null;
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    response  = await client.SendAsync(request);
+                }
+                    
+
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string contentResponse = await response.Content.ReadAsStringAsync();
@@ -78,13 +86,13 @@ namespace AppCRUD.Services
             GeneralResponseModel Generalresponse;
             try
             {
-                string url = $"{_baseUrl}/{Id}";
+                Uri url = new Uri( $"{_baseUrl}/api/values/{Id}");
 
                 
                 HttpRequestMessage request = new HttpRequestMessage();
-                request.RequestUri = new Uri($"{_baseUrl}/api/values/");
+                request.RequestUri = url;
                 request.Method = HttpMethod.Delete;
-                request.Headers.Add("Accpet", "application/json");
+                request.Headers.Add("Accept", "application/json");
                 HttpClient client = new HttpClient();
                 HttpResponseMessage response = await client.SendAsync(request);
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -110,33 +118,34 @@ namespace AppCRUD.Services
         /// Get complete list of birds
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ListBirdsModel>> GetListBirdAsync()
+        public async Task<ListBirdsModel> GetListBirdAsync()
         {
             ListBirdsModel listBirds = null;
-            IEnumerable<ListBirdsModel> birds = null ;
+            
             try
             {
                 HttpRequestMessage request = new HttpRequestMessage();
                 request.RequestUri = new Uri($"{_baseUrl}/api/values/");
                 request.Method = HttpMethod.Get;
-                request.Headers.Add("Accpet","application/json");
+                request.Headers.Add("Accept", "application/json");
                 HttpClient client = new HttpClient();
                 HttpResponseMessage response = await client.SendAsync(request);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    birds = JsonConvert.DeserializeObject<IEnumerable<ListBirdsModel>>(content);
+                    listBirds = JsonConvert.DeserializeObject<ListBirdsModel>(content);
+                  //  birds = responseModel.ListBirds;
 
                 }
 
-                return birds;
+                return listBirds;
 
             }
             catch (Exception ex)
             {
 
-                listBirds = new ListBirdsModel { generalResponseModel= new GeneralResponseModel { Status = "500", Message =ex.Message } };
-                return new List<ListBirdsModel> { listBirds };
+                listBirds = new ListBirdsModel { GeneralResponseModel= new GeneralResponseModel { Status = "500", Message =ex.Message } };
+                return listBirds;
             }
             
         }
@@ -153,7 +162,7 @@ namespace AppCRUD.Services
             GeneralResponseModel Generalresponse;
             try
             {
-                string url = $"{_baseUrl}api/values/";
+                
                 var dataPost = new
                 {
                     Id = birds.Id,
@@ -162,14 +171,15 @@ namespace AppCRUD.Services
                     TypeId = birds.TypeId
                 };
                 string jsonData = JsonConvert.SerializeObject(dataPost);
-                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                HttpRequestMessage request = new HttpRequestMessage();
-                request.RequestUri = new Uri($"{_baseUrl}/api/values/");
-                request.Method = HttpMethod.Put;
-                request.Headers.Add("Accpet", "application/json");
-                request.Content = content;
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.SendAsync(request);
+                Uri baseUrl = new Uri($"{_baseUrl}");
+                HttpResponseMessage response = null;
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = baseUrl;
+                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                     response = await httpClient.PutAsync("/api/values/", content);
+                }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string contentResponse = await response.Content.ReadAsStringAsync();

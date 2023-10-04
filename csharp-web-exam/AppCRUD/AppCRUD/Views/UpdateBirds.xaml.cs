@@ -40,6 +40,7 @@ namespace AppCRUD.Views
             BindingContext = viewModel = new UpdateBirdsViewModel(bird);
             _typeQuery = 1; //1 for update
             buttonAction.Text = "Update";
+            
         }
 
         private string ValidForm()
