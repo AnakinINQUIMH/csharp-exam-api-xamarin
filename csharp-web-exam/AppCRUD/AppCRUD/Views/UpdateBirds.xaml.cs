@@ -76,12 +76,18 @@ namespace AppCRUD.Views
                     await DisplayAlert("Error", validForm, "Ok");
                     return;
                 }
-                using (new HUD("Cargando"))
+                try
                 {
                     BirdsModel birds = new BirdsModel() { Id = viewModel.BirdsModel.Id, Name = viewModel.BirdsModel.Name, Feeding = viewModel.BirdsModel.Feeding, TypeId = viewModel.BirdsModel.TypeId };
                     generalResponse = await viewModel.Service.CreateOrUpdateBirdAsync(_typeQuery, birds);
-                    await DisplayAlert(generalResponse.Status == HttpStatusCode.OK.ToString()?"Success":"Error", generalResponse.Message, "Ok");
+                  
                 }
+                catch (Exception)
+                {
+
+                    await DisplayAlert("Error", "", "Ok");
+                }
+
             }
             else
             {
@@ -89,5 +95,6 @@ namespace AppCRUD.Views
             }
 
         }
+
     }
 }
